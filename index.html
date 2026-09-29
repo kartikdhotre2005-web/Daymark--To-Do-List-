@@ -44,13 +44,14 @@
     .brand-mark svg { width: 17px; height: 17px; }
     .today-label { color: var(--muted); font-size: 13px; font-weight: 500; }
     .layout { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; }
-    .nav { display: flex; min-width: 0; justify-content: center; gap: 4px; }
-    .nav button { display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 11px; border: 0; border-radius: 7px; background: transparent; color: #68736c; white-space: nowrap; cursor: pointer; transition: background .18s, color .18s; }
-    .nav button:hover { background: #eef0e9; color: var(--ink); }
-    .nav button.active { background: var(--green-soft); color: var(--green); font-weight: 600; }
+    .nav { display: flex; min-width: 0; justify-content: center; gap: 4px; padding: 4px; border: 1px solid #dce8df; border-radius: 10px; background: var(--green-soft); }
+    .nav button { display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 11px; border: 0; border-radius: 7px; background: transparent; color: #4f6758; white-space: nowrap; cursor: pointer; transition: background .18s, color .18s, box-shadow .18s; }
+    .nav button:hover { background: #dce9df; color: var(--ink); }
+    .nav button.active { background: var(--green); color: #fff; font-weight: 600; box-shadow: 0 2px 6px rgb(29 87 63 / 18%); }
     .nav-icon { display: grid; width: 18px; height: 18px; place-items: center; }
     .nav-icon svg { width: 17px; height: 17px; stroke-width: 1.8; }
-    .nav-count { color: #8b948e; font-size: 12px; }
+    .nav-count { color: #718578; font-size: 12px; }
+    .nav button.active .nav-count { color: #e3efe7; }
     main { min-width: 0; }
     .heading-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 27px; }
     h1 { margin: 0; font-family: "Fraunces", Georgia, serif; font-size: clamp(34px, 4vw, 45px); font-weight: 500; letter-spacing: 0; line-height: 1.08; }
