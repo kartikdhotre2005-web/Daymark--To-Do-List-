@@ -98,7 +98,9 @@
     .empty-mark svg { width: 20px; height: 20px; }
     .empty p { margin: 0; font-family: "Fraunces", Georgia, serif; font-size: 19px; color: var(--ink); }
     .empty span { display: block; margin-top: 7px; font-size: 12px; }
-    .footer-row { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; color: var(--muted); font-size: 11px; }
+    .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; color: var(--muted); font-size: 11px; }
+    .storage-status { margin-left: auto; text-align: right; }
+    .storage-status.error { color: #bd5d48; }
     .clear-button { padding: 5px 0; border: 0; background: transparent; color: #8a938d; font-size: 11px; cursor: pointer; }
     .clear-button:hover { color: var(--coral); }
     @media (max-width: 760px) {
@@ -174,7 +176,7 @@
         </form>
         <div class="list-head"><h2 id="list-label">Your list</h2><span class="sort-label">Soonest first</span></div>
         <section class="task-list" id="task-list" aria-live="polite"></section>
-        <div class="footer-row"><span id="remaining-count">Nothing on your list yet</span><button class="clear-button" id="clear-completed" type="button" hidden>Clear completed</button></div>
+        <div class="footer-row"><span id="remaining-count">Nothing on your list yet</span><span class="storage-status" id="storage-status" role="status" aria-live="polite">Saved on this device</span><button class="clear-button" id="clear-completed" type="button" hidden>Clear completed</button></div>
       </main>
     </div>
   </div>
@@ -192,10 +194,16 @@
     document.querySelector("#today-label").textContent = dateLabel.format(today);
 
     let tasks = [];
+    const storageStatus = document.querySelector("#storage-status");
     try {
-      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      const storedValue = localStorage.getItem(STORAGE_KEY);
+      const stored = JSON.parse(storedValue || "[]");
       if (Array.isArray(stored)) tasks = stored.filter((task) => task && typeof task.id === "string" && typeof task.title === "string");
-    } catch { tasks = []; }
+      else if (storedValue) storageStatus.textContent = "Saved list could not be read";
+    } catch {
+      storageStatus.textContent = "Browser storage is unavailable; tasks may not persist";
+      storageStatus.classList.add("error");
+    }
     let activeFilter = "all";
 
     const views = {
@@ -225,7 +233,16 @@
       if (activeFilter === "done") return task.done;
       return true;
     };
-    const persist = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    const persist = () => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+        storageStatus.textContent = "Saved on this device";
+        storageStatus.classList.remove("error");
+      } catch {
+        storageStatus.textContent = "Could not save; check browser storage settings";
+        storageStatus.classList.add("error");
+      }
+    };
 
     function render() {
       const todayTasks = tasks.filter((task) => !task.done && task.due === todayString);
