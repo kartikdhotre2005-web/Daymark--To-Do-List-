@@ -38,23 +38,19 @@
     button, input, select { font: inherit; }
     button { color: inherit; }
     .shell { width: min(1160px, 100%); min-height: 100vh; margin: 0 auto; padding: 34px 42px; }
-    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 56px; }
+    .topbar { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 24px; align-items: center; margin-bottom: 48px; }
     .brand { display: flex; align-items: center; gap: 11px; font-size: 15px; font-weight: 700; letter-spacing: .02em; }
     .brand-mark { display: grid; width: 31px; height: 31px; place-items: center; border-radius: 9px; background: var(--green); color: #fff; }
     .brand-mark svg { width: 17px; height: 17px; }
     .today-label { color: var(--muted); font-size: 13px; font-weight: 500; }
-    .layout { display: grid; grid-template-columns: 218px minmax(0, 1fr); gap: 70px; align-items: start; }
-    .sidebar { position: sticky; top: 28px; }
-    .eyebrow { margin: 0 0 17px; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
-    .nav { display: grid; gap: 5px; }
-    .nav button { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 42px; padding: 0 12px; border: 0; border-radius: 7px; background: transparent; color: #68736c; text-align: left; cursor: pointer; transition: background .18s, color .18s; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; }
+    .nav { display: flex; min-width: 0; justify-content: center; gap: 4px; }
+    .nav button { display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 11px; border: 0; border-radius: 7px; background: transparent; color: #68736c; white-space: nowrap; cursor: pointer; transition: background .18s, color .18s; }
     .nav button:hover { background: #eef0e9; color: var(--ink); }
     .nav button.active { background: var(--green-soft); color: var(--green); font-weight: 600; }
     .nav-icon { display: grid; width: 18px; height: 18px; place-items: center; }
     .nav-icon svg { width: 17px; height: 17px; stroke-width: 1.8; }
-    .nav-count { margin-left: auto; color: #8b948e; font-size: 12px; }
-    .side-note { margin-top: 52px; padding: 18px 16px; border-left: 2px solid var(--lime); color: #68736c; font-family: "Fraunces", Georgia, serif; font-size: 17px; line-height: 1.35; }
-    .side-note span { display: block; margin-top: 10px; color: var(--muted); font-family: "DM Sans", sans-serif; font-size: 11px; }
+    .nav-count { color: #8b948e; font-size: 12px; }
     main { min-width: 0; }
     .heading-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 27px; }
     h1 { margin: 0; font-family: "Fraunces", Georgia, serif; font-size: clamp(34px, 4vw, 45px); font-weight: 500; letter-spacing: 0; line-height: 1.08; }
@@ -105,14 +101,10 @@
     .clear-button:hover { color: var(--coral); }
     @media (max-width: 760px) {
       .shell { padding: 23px 20px; }
-      .topbar { margin-bottom: 31px; }
-      .layout { grid-template-columns: 1fr; gap: 27px; }
-      .sidebar { position: static; }
-      .eyebrow, .side-note { display: none; }
-      .nav { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 3px; }
-      .nav button { width: auto; min-width: max-content; min-height: 38px; padding: 0 11px; font-size: 12px; }
+      .topbar { grid-template-columns: minmax(0, 1fr) auto; gap: 16px 12px; margin-bottom: 31px; }
+      .nav { grid-column: 1 / -1; justify-content: flex-start; overflow-x: auto; padding-bottom: 3px; }
+      .nav button { min-height: 38px; padding: 0 10px; font-size: 12px; }
       .nav-icon { display: none; }
-      .nav-count { margin-left: 0; }
       .heading-row { margin-bottom: 20px; }
       .composer { grid-template-columns: minmax(0, 1fr) auto; }
       .composer input[type="text"] { grid-column: 1 / -1; min-height: 36px; }
@@ -143,19 +135,15 @@
         <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg></span>
         Daymark
       </div>
+      <nav class="nav" id="filters" aria-label="Task views">
+        <button class="active" type="button" data-filter="all" aria-pressed="true"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></span>All tasks <span class="nav-count" data-count="all">0</span></button>
+        <button type="button" data-filter="today" aria-pressed="false"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></span>Today <span class="nav-count" data-count="today">0</span></button>
+        <button type="button" data-filter="upcoming" aria-pressed="false"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/><path d="M8 7h8M8 11h6"/></svg></span>Upcoming <span class="nav-count" data-count="upcoming">0</span></button>
+        <button type="button" data-filter="done" aria-pressed="false"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span>Completed <span class="nav-count" data-count="done">0</span></button>
+      </nav>
       <time class="today-label" id="today-label"></time>
     </header>
     <div class="layout">
-      <aside class="sidebar" aria-label="Task views">
-        <p class="eyebrow">Your workspace</p>
-        <nav class="nav" id="filters">
-          <button class="active" type="button" data-filter="all" aria-pressed="true"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></span>All tasks <span class="nav-count" data-count="all">0</span></button>
-          <button type="button" data-filter="today" aria-pressed="false"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></span>Today <span class="nav-count" data-count="today">0</span></button>
-          <button type="button" data-filter="upcoming" aria-pressed="false"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/><path d="M8 7h8M8 11h6"/></svg></span>Upcoming <span class="nav-count" data-count="upcoming">0</span></button>
-          <button type="button" data-filter="done" aria-pressed="false"><span class="nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg></span>Completed <span class="nav-count" data-count="done">0</span></button>
-        </nav>
-        <div class="side-note">“The secret of getting ahead is getting started.”<span>Mark Twain</span></div>
-      </aside>
       <main>
         <div class="heading-row">
           <div>
